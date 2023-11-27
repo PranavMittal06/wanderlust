@@ -9,9 +9,9 @@ const listingSchema=new Schema({
 
     description:String,
     image:
-        {
-            type:String,
-            set:(v)=>v===""?"https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w=":v}
+        { url:String,
+          filename:String,  
+            }
     ,
     price:Number,
     location:String,
@@ -26,6 +26,17 @@ const listingSchema=new Schema({
         type:Schema.Types.ObjectId,
         ref: "User"
     },
+    geometry: {
+        type: {
+          type: String, // Don't do `{ location: { type: String } }`
+          enum: ['Point'], // 'location.type' must be 'Point'
+          required: true
+        },
+        coordinates: {
+          type: [Number],
+          required: true
+        }
+      },
 });
 listingSchema.post("findOneAndDelete",async(listing)=>{
     if(listing){

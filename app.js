@@ -1,3 +1,7 @@
+if(process.env.NODE_ENV !="production"){
+require('dotenv').config();
+}
+
 const express=require("express");
 const app=express();
 const mongoose=require("mongoose");
@@ -5,6 +9,7 @@ const mongoose=require("mongoose");
 const path=require("path");
 const methodOverride = require("method-override");
 const ejsMate=require("ejs-mate");
+
 const session=require("express-session");
 const ExpressError=require("./utils/ExpressError.js");
 const flash=require("connect-flash");
@@ -12,7 +17,6 @@ const { error } = require("console");
 const passport=require("passport");
 const LocalStrategy=require("passport-local");
 const User=require("./models/user.js");
-
 
 const listingRouter=require("./routes/listing.js");
 const reviewRouter=require("./routes/review.js");
@@ -46,9 +50,9 @@ async function main() {
     },
   };
 
-  app.get("/",(req,res)=>{
-    res.send("hi,I am root");
-});
+//   app.get("/",(req,res)=>{
+//     res.send("hi,I am root");
+// });
   app.use(session(sessionOptions));
   app.use(flash());
   app.use(passport.initialize());
@@ -77,7 +81,7 @@ app.all("*",(req,res,next)=>{
 });
 app.use((err,req,res,next)=>{
   let{statusCode=500,message="Something went wrong"}=err;
-  res.status(statusCode).render(error.ejs,{message});
+  res.status(statusCode).render("error.ejs",{message});
 });
 app.listen(8080,()=>{
     console.log("server is listening to port 8080");
